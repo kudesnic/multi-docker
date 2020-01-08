@@ -7,8 +7,8 @@ before_install:
 
 #in this case our complex project has tests only in client directory thats why we run tests only for one module
 script:
-  #- docker run dereviankoandr/react-test npm test -- --coverage # -- --coverage needed to  make sure that test exit with status code of either 0 or not 0
-  - docker run dereviankoandr/react-test npm test # -- --coverage not needed in new version of Just library
+  - docker run dereviankoandr/react-test npm test -- --coverage # -- --coverage needed to  make sure that test exit with status code of either 0 or not 0
+  #- docker run dereviankoandr/react-test npm test # -- --coverage not needed in new version of Just library
 
 #in below section we build production version for all complex modules
 after_success:
