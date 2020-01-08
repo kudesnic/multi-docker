@@ -1,0 +1,25 @@
+language: node_js
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t dereviankoandr/react-test -f ./client/Dockerfile.dev ./client
+
+#in this case our complex project has tests only in client directory thats why we run tests only for one module
+script:
+  #- docker run dereviankoandr/react-test npm test -- --coverage # -- --coverage needed to  make sure that test exit with status code of either 0 or not 0
+  - docker run dereviankoandr/react-test npm test # -- --coverage not needed in new version of Just library
+
+#in below section we build production version for all complex modules
+after_success:
+  - docker build -t dereviankoandr/multi-client ./client
+  - docker build -t dereviankoandr/multi-nginx ./nginx
+  - docker build -t dereviankoandr/multi-server ./server
+  - docker build -t dereviankoandr/multi-worker ./worker
+  # log in Docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take all images and push them to Docker CLI
+  - docker push dereviankoandr/multi-client
+  - docker push dereviankoandr/multi-nginx
+  - docker push dereviankoandr/multi-server
+  - docker push dereviankoandr/multi-worker
